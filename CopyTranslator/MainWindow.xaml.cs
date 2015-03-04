@@ -18,6 +18,7 @@ using Windows.Data.Xml.Dom;
 using Windows.UI.Notifications;
 using CopyTranslator.Code;
 using CopyTranslator.Code.Translator;
+using Ivony.Logs;
 
 namespace CopyTranslator
 {
@@ -28,14 +29,16 @@ namespace CopyTranslator
     {
         private const string APP_ID = "XiangWan.CopyTranslator";
         private readonly  ITranslatorProvider translator=new BaiduTranslatorProvider();
+
         public MainWindow()
-        {
-            InitializeComponent();
-            ShortcutHelper.TryCreateShortcut(APP_ID); 
+        { 
+            InitializeComponent(); 
+            ShortcutHelper.TryCreateShortcut(APP_ID);
+            App.Logger.LogInfo("******主程序启动******");
         }
 
         private async void ClipboardMonitor_OnClipboardChange(ClipboardFormat format, object data)
-        {
+        { 
             if (App.LastBoradData==data)
             {
                 return;
@@ -44,6 +47,7 @@ namespace CopyTranslator
             switch (format)
             {
                 case ClipboardFormat.Text:
+                    App.Logger.LogInfo("剪切板当前值{0}", data);
                     await Task.Factory.StartNew(async () =>
                     {
                         var dict = await translator.Translator(data.ToString());
@@ -53,7 +57,11 @@ namespace CopyTranslator
                         {
                             var msg = string.Format("{0} --> {1}", firstKey, firstValue ?? "翻译失败");
                             CreateToast(data.ToString(), msg, data.ToString(), "power by xiangwan");
-                        } 
+                        }
+                        else
+                        {
+                            App.Logger.LogInfo("网络返回空值");
+                        }
                     });
                     break;
             }
@@ -71,39 +79,43 @@ namespace CopyTranslator
            // stringElements[1].AppendChild(toastXml.CreateTextNode(line2));
             //stringElements[2].AppendChild(toastXml.CreateTextNode(line3));  
            
-              IXmlNode toastNode = toastXml.SelectSingleNode("/toast");
-              ((XmlElement)toastNode).SetAttribute("duration", "3000");
-              ((XmlElement)toastNode).SetAttribute("data", data);
+             
             var toast = new ToastNotification(toastXml);
-            toast.Activated +=toast_Activated;            
+            toast.Activated += (s, e) =>
+            {
+                var text = toastXml.GetElementsByTagName("text")[0].ChildNodes[0].InnerText;
+                var word = text.Substring(0, text.IndexOf("-->"));
+                Process.Start("http://www.bing.com/dict/search?intlF=0&q=" + word);
+                App.Logger.LogInfo("toast_Activated，已打开浏览器搜索");
+            };
+            toast.Dismissed += (s, e) => App.Logger.LogInfo("toast Dismissed ");
+            toast.Failed += (s, e) => App.Logger.LogWarning("toast.Failed : {0}", e.ErrorCode);
             // Show the toast. Be sure to specify the AppUserModelId on your application's shortcut!
             ToastNotificationManager.CreateToastNotifier(APP_ID).Show(toast);
+            App.Logger.LogInfo("已成功创建TOAST");
         }
          
-
-        private void toast_Activated(ToastNotification sender, object e)
-        {
-            var data = sender.Content.SelectSingleNode("/toast").Attributes.GetNamedItem("data").InnerText;
-           Process.Start("http://www.bing.com/dict/search?intlF=0&q=" + data);
-        }
-
+ 
    
          
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            ClipboardMonitor.Stop(); 
+            ClipboardMonitor.Stop();
+            App.Logger.LogInfo("******主程序关闭******");
         }
 
         private void ButtonStart_OnClick(object sender, RoutedEventArgs e)
         {
             ClipboardMonitor.Start();
-            ClipboardMonitor.OnClipboardChange += ClipboardMonitor_OnClipboardChange; 
+            ClipboardMonitor.OnClipboardChange += ClipboardMonitor_OnClipboardChange;
+            App.Logger.LogInfo("======启动剪切板监控======");
         }
 
         private void ButtonStop_OnClick(object sender, RoutedEventArgs e)
         {
-            ClipboardMonitor.Stop(); 
+            ClipboardMonitor.Stop();
+            App.Logger.LogInfo("======关闭剪切板监控======");
         }
     }
 }

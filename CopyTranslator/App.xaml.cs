@@ -5,6 +5,7 @@ using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using Ivony.Logs;
 
 namespace CopyTranslator
 {
@@ -14,5 +15,6 @@ namespace CopyTranslator
     public partial class App : Application
     {
         public static object LastBoradData { get; set; }
+        public static  TextFileLogger Logger=new TextFileLogger("log.txt");
     }
 }
