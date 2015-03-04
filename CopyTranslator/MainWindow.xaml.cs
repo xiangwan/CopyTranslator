@@ -56,7 +56,7 @@ namespace CopyTranslator
                         if (firstKey != null)
                         {
                             var msg = string.Format("{0} --> {1}", firstKey, firstValue ?? "翻译失败");
-                            CreateToast(data.ToString(), msg, data.ToString(), "power by xiangwan");
+                            CreateToast(data.ToString(), msg, "点击用浏览器搜索", "power by xiangwan");
                         }
                         else
                         {
@@ -76,7 +76,7 @@ namespace CopyTranslator
             XmlNodeList stringElements = toastXml.GetElementsByTagName("text");
             
             stringElements[0].AppendChild(toastXml.CreateTextNode(line1));
-           // stringElements[1].AppendChild(toastXml.CreateTextNode(line2));
+            //stringElements[1].AppendChild(toastXml.CreateTextNode(line2));
             //stringElements[2].AppendChild(toastXml.CreateTextNode(line3));  
            
              
@@ -107,9 +107,11 @@ namespace CopyTranslator
 
         private void ButtonStart_OnClick(object sender, RoutedEventArgs e)
         {
+            Clipboard.Clear();
             ClipboardMonitor.Start();
             ClipboardMonitor.OnClipboardChange += ClipboardMonitor_OnClipboardChange;
             App.Logger.LogInfo("======启动剪切板监控======");
+            CreateToast("向晚","提示 --> 点击消息会打开浏览器搜索","","");
         }
 
         private void ButtonStop_OnClick(object sender, RoutedEventArgs e)

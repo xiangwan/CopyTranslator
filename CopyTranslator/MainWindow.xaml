@@ -1,7 +1,7 @@
 ﻿<Window x:Class="CopyTranslator.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="复制翻译者" Height="250" Width="350" Closing="Window_Closing">
+        Title="复制翻译者(向晚出品)" Height="300" Width="400" Closing="Window_Closing" WindowStartupLocation="CenterScreen">
  <Grid>
      <Grid.ColumnDefinitions>
          <ColumnDefinition Width="*"></ColumnDefinition>
