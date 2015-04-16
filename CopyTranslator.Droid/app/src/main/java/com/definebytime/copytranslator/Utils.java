@@ -2,7 +2,10 @@ package com.definebytime.copytranslator;
 
 import android.app.ActivityManager;
 import android.content.Context;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -32,5 +35,26 @@ public class Utils {
             }
         }
         return isRun;
+    }
+
+    /**
+     * 获取所有应用
+     *
+     * @param context;
+     * @return List<PackageInfo> apps;
+     */
+    public static List<PackageInfo> getAllApps(Context context) {
+        List<PackageInfo> apps = new ArrayList<PackageInfo>();
+        PackageManager pManager = context.getPackageManager();
+        //获取手机内所有的应用
+        List<PackageInfo> pakList = pManager.getInstalledPackages(0);
+        for (int i = 0; i < pakList.size(); i++) {
+            PackageInfo pak = (PackageInfo) pakList.get(i);
+            //判断是否为系统预装的应用
+            if ((pak.applicationInfo.flags & pak.applicationInfo.FLAG_SYSTEM) <= 0){
+                apps.add(pak);
+            }
+        }
+        return apps;
     }
 }

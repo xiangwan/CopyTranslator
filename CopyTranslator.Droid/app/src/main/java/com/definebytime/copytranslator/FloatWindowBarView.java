@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
@@ -27,7 +28,7 @@ public class FloatWindowBarView extends LinearLayout {
 	 */
 	 private static int statusBarHeight;
 
-	/**
+    /**
 	 * 用于更新小悬浮窗的位置
 	 */
 	private WindowManager windowManager;
@@ -67,14 +68,20 @@ public class FloatWindowBarView extends LinearLayout {
 	 */
 	private float yInView;
 
-	public FloatWindowBarView(Context context) {
+
+    public final ProgressBar pbLoading;
+
+    public final ImageView ivOpen;
+
+    public FloatWindowBarView(Context context) {
 		super(context);
 		windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
 		LayoutInflater.from(context).inflate(R.layout.float_bar, this);
-		ProgressBar view = (ProgressBar)findViewById(R.id.pbLoading);
-		viewWidth = view.getLayoutParams().width;
-		viewHeight = view.getLayoutParams().height;
+	    pbLoading = (ProgressBar)findViewById(R.id.pbLoading);
+		viewWidth = pbLoading.getLayoutParams().width;
+		viewHeight = pbLoading.getLayoutParams().height;
 
+        ivOpen=(ImageView)findViewById(R.id.ivOpen);
 	}
 
 	@Override
@@ -130,8 +137,8 @@ public class FloatWindowBarView extends LinearLayout {
 	 * 打开大悬浮窗，同时关闭小悬浮窗。
 	 */
 	private void openBoxWindow() {
-		MyWindowManager.createBoxWindow(getContext());
-		MyWindowManager.removeBarWindow(getContext());
+		MyWindowManager.showBoxWindow(getContext());
+		MyWindowManager.hideBarWindow(getContext());
 	}
 
 	/**

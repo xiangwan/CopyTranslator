@@ -30,7 +30,7 @@ public class ClipChangedListenerService extends Service {
 
         if (myClipListener == null) {
             Log.d("XXX", "onCreate：myClipListener == null");
-            myClipListener = new MyClipListener();
+            myClipListener = new MyClipListener(ClipChangedListenerService.this);
         }
         Notification notification = new Notification(R.drawable.ic_action,
                 "复制翻译者已启动", System.currentTimeMillis());
@@ -53,15 +53,12 @@ public class ClipChangedListenerService extends Service {
 
         if (myClipListener == null) {
             Log.d("XXX", "onStartCommand：myClipListener == null");
-            myClipListener = new MyClipListener();
+            myClipListener = new MyClipListener(ClipChangedListenerService.this);
         }
 
         clipboardManager.addPrimaryClipChangedListener(myClipListener);
         isRegistered = true;
         Log.d("XXX", "onStartCommand()");
-        if (!MyWindowManager.isWindowShowing()){
-            MyWindowManager.createBarWindow(getApplicationContext());
-        }
         return Service.START_STICKY;
     }
 
@@ -73,6 +70,8 @@ public class ClipChangedListenerService extends Service {
                 Log.d("XXX", "removePrimaryClipChangedListener");
                 clipboardManager.removePrimaryClipChangedListener(myClipListener);
                 isRegistered=false;
+                MyWindowManager.removeBarWindow(getApplicationContext());
+                MyWindowManager.removeBoxWindow(getApplicationContext());
             }
         }
     }
@@ -85,6 +84,12 @@ public class ClipChangedListenerService extends Service {
 
     public class MyClipListener implements ClipboardManager.OnPrimaryClipChangedListener {
 
+        private final Context mContext;
+
+        public MyClipListener(Context context ){
+            mContext=context;
+
+        }
         @Override
         public void onPrimaryClipChanged() {
                 ClipData cdText = clipboardManager.getPrimaryClip();
@@ -94,6 +99,8 @@ public class ClipChangedListenerService extends Service {
                     return;
                 } else {
                     Toast.makeText(getApplicationContext(),text, Toast.LENGTH_LONG).show();
+                    MyWindowManager.showBarWindow(mContext,true);
+                    MyWindowManager.loadNewPage(text);
                 }
         }
     }
