@@ -4,7 +4,6 @@ import android.app.Notification;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.ClipData;
-import android.content.ClipDescription;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
@@ -33,14 +32,14 @@ public class ClipChangedListenerService extends Service {
             Log.d("XXX", "onCreate：myClipListener == null");
             myClipListener = new MyClipListener();
         }
-  /*      Notification notification = new Notification(R.drawable.ic_action,
-                "来自复制翻译者的消息", System.currentTimeMillis());
+        Notification notification = new Notification(R.drawable.ic_action,
+                "复制翻译者已启动", System.currentTimeMillis());
         Intent notificationIntent = new Intent(this, MainActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0,
                 notificationIntent, 0);
         notification.setLatestEventInfo(this, "复制翻译者", "复制文本后将自动弹出翻译结果",
                 pendingIntent);
-        startForeground(1, notification);*/
+        startForeground(1, notification);
         Log.d("XXX", "onCreate() executed");
     }
 
@@ -59,6 +58,10 @@ public class ClipChangedListenerService extends Service {
 
         clipboardManager.addPrimaryClipChangedListener(myClipListener);
         isRegistered = true;
+        Log.d("XXX", "onStartCommand()");
+        if (!MyWindowManager.isWindowShowing()){
+            MyWindowManager.createBarWindow(getApplicationContext());
+        }
         return Service.START_STICKY;
     }
 
@@ -84,18 +87,14 @@ public class ClipChangedListenerService extends Service {
 
         @Override
         public void onPrimaryClipChanged() {
-            if (clipboardManager.getPrimaryClipDescription().hasMimeType(
-                    ClipDescription.MIMETYPE_TEXT_PLAIN)) {
                 ClipData cdText = clipboardManager.getPrimaryClip();
-                ClipData.Item item = cdText.getItemAt(0);
-                //此处是TEXT文本信息
-                if (item.getText() == null) {
+                String text = cdText.getItemAt(0).coerceToText(getApplicationContext()).toString();
+                if (text == null||text=="") {
                     Toast.makeText(getApplicationContext(), "剪贴板中无内容", Toast.LENGTH_SHORT).show();
                     return;
                 } else {
-                    Toast.makeText(getApplicationContext(), item.getText(), Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(),text, Toast.LENGTH_LONG).show();
                 }
-            }
         }
     }
 }
