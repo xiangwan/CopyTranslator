@@ -43,6 +43,7 @@ private   String SERVICE_NAME="com.definebytime.copytranslator.ClipChangedListen
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            startActivity(new Intent(MainActivity.this,SettingActivity.class));
             return true;
         }
 
