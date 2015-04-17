@@ -73,8 +73,8 @@ public class MyWindowManager {
             boxWindow.setWebViewListener(new FloatWindowBoxView.WebViewListener() {
                 @Override
                 public void onPageFinished(String url) {
-                    barWindow.ivOpen.setVisibility(View.VISIBLE);
-                    barWindow.pbLoading.setVisibility(View.GONE);
+
+
                 }
             });
             hideBoxWindow(context);
@@ -88,11 +88,9 @@ public class MyWindowManager {
 
         if (barWindow == null || barWindowParams == null) createBarWindow(context);
         if (isLoading){
-            barWindow.ivOpen.setVisibility(View.GONE);
-            barWindow.pbLoading.setVisibility(View.VISIBLE);
+
         }else{
-            barWindow.ivOpen.setVisibility(View.VISIBLE);
-            barWindow.pbLoading.setVisibility(View.GONE);
+
         }
         barWindow.setVisibility(View.VISIBLE);
     }

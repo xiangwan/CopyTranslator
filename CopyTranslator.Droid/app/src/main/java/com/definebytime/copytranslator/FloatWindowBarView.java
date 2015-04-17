@@ -69,19 +69,15 @@ public class FloatWindowBarView extends LinearLayout {
 	private float yInView;
 
 
-    public final ProgressBar pbLoading;
-
     public final ImageView ivOpen;
 
     public FloatWindowBarView(Context context) {
 		super(context);
 		windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
 		LayoutInflater.from(context).inflate(R.layout.float_bar, this);
-	    pbLoading = (ProgressBar)findViewById(R.id.pbLoading);
-		viewWidth = pbLoading.getLayoutParams().width;
-		viewHeight = pbLoading.getLayoutParams().height;
-
         ivOpen=(ImageView)findViewById(R.id.ivOpen);
+		viewWidth = ivOpen.getLayoutParams().width;
+		viewHeight = ivOpen.getLayoutParams().height;
 	}
 
 	@Override
