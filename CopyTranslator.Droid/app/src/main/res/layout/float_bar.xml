@@ -8,12 +8,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/ic_open"
-        android:id="@+id/ivOpen"
-        android:visibility="gone"/>
-
-    <ProgressBar
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/pbLoading" />
-
+        android:background="@drawable/corner_border_show"
+        android:id="@+id/ivOpen" />
 </LinearLayout>

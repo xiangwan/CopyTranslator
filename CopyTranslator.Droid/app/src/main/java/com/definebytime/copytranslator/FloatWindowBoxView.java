@@ -7,7 +7,9 @@ import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
+
 
 public class FloatWindowBoxView extends LinearLayout {
 
@@ -34,15 +36,15 @@ public class FloatWindowBoxView extends LinearLayout {
         View view = findViewById(R.id.llBox);
         viewWidth = view.getLayoutParams().width;
         viewHeight = view.getLayoutParams().height;
-        Button close = (Button) findViewById(R.id.btnClose);
+        ImageButton close = (ImageButton) findViewById(R.id.btnClose);
         close.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 MyWindowManager.hideBoxWindow(context);
-                MyWindowManager.showBarWindow(context, false);
+                //MyWindowManager.showBarWindow(context, false);
             }
         });
-
+      //  close.getBackground().setAlpha(100);
         wvResult = (WebView) findViewById(R.id.wvResult);
         wvResult.setWebViewClient(new MyWebViewClient());
         wvResult.getSettings().setJavaScriptEnabled(true);
