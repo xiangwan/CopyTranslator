@@ -4,6 +4,7 @@ import android.app.ActivityManager;
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.net.ConnectivityManager;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -16,10 +17,8 @@ public class Utils {
     /**
      * 判断服务是否后台运行
      *
-     * @param mContext
-     *            Context
-     * @param className
-     *            判断的服务名字
+     * @param mContext  Context
+     * @param className 判断的服务名字
      * @return true 在运行 false 不在运行
      */
     public static boolean isServiceRun(Context mContext, String className) {
@@ -44,20 +43,21 @@ public class Utils {
      * @param context;
      * @return List<PackageInfo> apps;
      */
-    public static HashMap<String,String > getAllApps(Context context) {
-        HashMap<String,String > apps=new HashMap<>();
+    public static HashMap<String, String> getAllApps(Context context) {
+        HashMap<String, String> apps = new HashMap<>();
         PackageManager pManager = context.getPackageManager();
         //获取手机内所有的应用
         List<PackageInfo> pakList = pManager.getInstalledPackages(0);
         for (int i = 0; i < pakList.size(); i++) {
-            PackageInfo pak =  pakList.get(i);
+            PackageInfo pak = pakList.get(i);
             //判断是否为系统预装的应用
-            if ((pak.applicationInfo.flags & pak.applicationInfo.FLAG_SYSTEM) <= 0){
-                apps.put(pak.packageName,pak.applicationInfo.loadLabel(pManager).toString());
+            if ((pak.applicationInfo.flags & pak.applicationInfo.FLAG_SYSTEM) <= 0) {
+                apps.put(pak.packageName, pak.applicationInfo.loadLabel(pManager).toString());
             }
         }
         return apps;
     }
+
     /**
      * 获取应用程序名称
      *
@@ -74,5 +74,13 @@ public class Utils {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public static boolean isNetAvailable(Context context) {
+        ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (connectivityManager.getActiveNetworkInfo() !=null) {
+            return connectivityManager.getActiveNetworkInfo().isAvailable();
+        }
+        return false;
     }
 }

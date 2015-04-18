@@ -2,8 +2,10 @@ package com.definebytime.copytranslator;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
@@ -47,11 +49,23 @@ public class FloatWindowBoxView extends LinearLayout {
       //  close.getBackground().setAlpha(100);
         wvResult = (WebView) findViewById(R.id.wvResult);
         wvResult.setWebViewClient(new MyWebViewClient());
+        wvResult.setWebChromeClient(new WebChromeClient(){
+            @Override
+            public void onProgressChanged(WebView view, int newProgress) {
+                super.onProgressChanged(view, newProgress);
+                Log.d("XXX","webview % ："+String.valueOf(newProgress));
+                if (webViewListener != null) webViewListener.onProgressChanged(newProgress);
+            }
+        });
         wvResult.getSettings().setJavaScriptEnabled(true);
+
     }
 
     public interface WebViewListener {
+
         void onPageFinished(String url);
+        void onReceivedError(String url,String desc);
+        void onProgressChanged(int progress);
     }
 
     public class MyWebViewClient extends WebViewClient {
@@ -62,6 +76,12 @@ public class FloatWindowBoxView extends LinearLayout {
                 view.loadUrl("javascript:$('#floatbar').remove();");
             }
             if (webViewListener != null) webViewListener.onPageFinished(url);
+        }
+
+        @Override
+        public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
+            super.onReceivedError(view, errorCode, description, failingUrl);
+            if (webViewListener != null) webViewListener.onReceivedError(failingUrl,description);
         }
     }
 }

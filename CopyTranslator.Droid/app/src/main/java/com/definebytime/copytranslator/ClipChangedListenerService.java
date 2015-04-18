@@ -69,7 +69,7 @@ public class ClipChangedListenerService extends Service {
             if (myClipListener != null) {
                 Log.d("XXX", "removePrimaryClipChangedListener");
                 clipboardManager.removePrimaryClipChangedListener(myClipListener);
-                isRegistered=false;
+                isRegistered = false;
                 MyWindowManager.removeBarWindow(getApplicationContext());
                 MyWindowManager.removeBoxWindow(getApplicationContext());
             }
@@ -86,22 +86,28 @@ public class ClipChangedListenerService extends Service {
 
         private final Context mContext;
 
-        public MyClipListener(Context context ){
-            mContext=context;
+        public MyClipListener(Context context) {
+            mContext = context;
 
         }
+
         @Override
         public void onPrimaryClipChanged() {
-                ClipData cdText = clipboardManager.getPrimaryClip();
-                String text = cdText.getItemAt(0).coerceToText(getApplicationContext()).toString();
-                if (text == null||text=="") {
-                    Toast.makeText(getApplicationContext(), "剪贴板中无内容", Toast.LENGTH_SHORT).show();
-                    return;
-                } else {
-                    Toast.makeText(getApplicationContext(),text, Toast.LENGTH_LONG).show();
-                    MyWindowManager.showBarWindow(mContext,true);
+            ClipData cdText = clipboardManager.getPrimaryClip();
+            String text = cdText.getItemAt(0).coerceToText(getApplicationContext()).toString();
+            String msg = text;
+            if (text == null || text.isEmpty()) {
+                msg = "剪贴板中无内容";
+            } else {
+                if (Utils.isNetAvailable(ClipChangedListenerService.this)) {
+                    MyWindowManager.showBarWindow(mContext, true);
                     MyWindowManager.loadNewPage(text);
+                } else {
+                    msg += "网络不可用";
                 }
+
+            }
+            Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_LONG).show();
         }
     }
 }

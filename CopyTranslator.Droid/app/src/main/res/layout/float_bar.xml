@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical" android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     >
@@ -9,5 +10,22 @@
         android:layout_height="wrap_content"
         android:src="@drawable/ic_open"
         android:background="@drawable/corner_border_show"
-        android:id="@+id/ivOpen" />
+        android:id="@+id/ivOpen"
+        android:visibility="gone"/>
+    <com.definebytime.copytranslator.NumberCircleProgressBar
+        android:id="@+id/numberCircleProgressbar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:padding="10dp"
+        custom:max="100"
+        custom:progress="0"
+        custom:progress_circle_radius="50dp"
+        custom:progress_fill_mode="rotate"
+        custom:progress_reached_color="#3498DB"
+        custom:progress_text_color="@android:color/black"
+        custom:progress_text_size="15sp"
+        custom:progress_text_visibility="visible"
+        custom:progress_unreached_color="#CCCCCC"
+        />
 </LinearLayout>

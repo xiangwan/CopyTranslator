@@ -73,7 +73,21 @@ public class MyWindowManager {
             boxWindow.setWebViewListener(new FloatWindowBoxView.WebViewListener() {
                 @Override
                 public void onPageFinished(String url) {
+                    barWindow.progressBar.setVisibility(View.GONE);
+                    barWindow.ivOpen.setVisibility(View.VISIBLE);
+                    barWindow.launchTask.execute(false);
+                }
 
+                @Override
+                public void onReceivedError(String url, String desc) {
+                    barWindow.progressBar.setVisibility(View.GONE);
+                    barWindow.ivOpen.setVisibility(View.VISIBLE);
+                    barWindow.launchTask.execute(false);
+                }
+
+                @Override
+                public void onProgressChanged(int progress) {
+                   barWindow.progressBar.setProgress(progress);
 
                 }
             });
@@ -133,7 +147,7 @@ public class MyWindowManager {
                 boxWindowParams.y = screenHeight / 2 - FloatWindowBoxView.viewHeight / 2;
                 boxWindowParams.type = LayoutParams.TYPE_SYSTEM_ALERT;
                 boxWindowParams.format = PixelFormat.RGBA_8888;
-                boxWindowParams.gravity = Gravity.LEFT | Gravity.TOP;
+                boxWindowParams.gravity = Gravity.LEFT | Gravity.CENTER_VERTICAL;
                 boxWindowParams.width = FloatWindowBoxView.viewWidth;
                 boxWindowParams.height = FloatWindowBoxView.viewHeight;
             }
@@ -160,8 +174,12 @@ public class MyWindowManager {
             boxWindow.setVisibility(View.GONE);
         }
     }
-    public static void loadNewPage(String word){
-        boxWindow.wvResult.loadUrl("http://newwap.iciba.com/cword/"+word);
+    public static void loadNewPage(String word) {
+        barWindow.progressBar.setProgress(0);
+        barWindow.progressBar.setVisibility(View.VISIBLE);
+        barWindow.launchTask.execute(true);
+        barWindow.ivOpen.setVisibility(View.GONE);
+        boxWindow.wvResult.loadUrl("http://newwap.iciba.com/cword/" + word);
     }
     /**
      * 将大悬浮窗从屏幕上移除。
