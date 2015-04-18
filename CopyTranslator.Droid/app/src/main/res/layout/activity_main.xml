@@ -5,29 +5,45 @@
     tools:context=".MainActivity"
     android:layout_gravity="center_vertical"
     android:orientation="vertical">
-
+    <android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/toolbar"
+        app:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:minHeight="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"/>
     <Button
         android:id="@+id/btnStartService"
-        android:text="@string/start_listener"
+        android:text="@string/btn_start_listener"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="20dp"
+        android:paddingLeft="50dp"
+        android:paddingRight="50dp"
+        android:layout_marginTop="50dp"
         android:layout_gravity="center_horizontal"
-        android:onClick="startClipService"/>
+        android:onClick="startClipService"
+        android:background="@drawable/btn_bg"/>
     <Button
         android:id="@+id/btnStopService"
-        android:text="@string/stop_listener"
+        android:text="@string/btn_stop_listener"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="20dp"
+        android:paddingLeft="50dp"
+        android:paddingRight="50dp"
+        android:layout_marginTop="20dp"
         android:layout_gravity="center_horizontal"
-        android:onClick="stopClipService"/>
-    <TextView
-        android:textIsSelectable="true"
-        android:text="xxxxxxxxxxxxxxxxxxxxxxxxxxxxr"
+        android:onClick="stopClipService"
+        android:background="@drawable/btn_bg"/>
+    <Button
+        android:id="@+id/btnSetting"
+        android:text="@string/btn_setting"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="20dp"
-        android:layout_gravity="center_horizontal" />
-
+        android:paddingLeft="50dp"
+        android:paddingRight="50dp"
+        android:layout_marginTop="20dp"
+        android:layout_gravity="center_horizontal"
+        android:onClick="openSetting"
+        android:background="@drawable/btn_bg"/>
 </LinearLayout>

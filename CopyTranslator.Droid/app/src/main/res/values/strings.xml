@@ -1,9 +1,22 @@
 <resources>
     <string name="app_name">复制翻译者</string>
 
-    <string name="hello_world">Hello world!</string>
-    <string name="action_settings">设置</string>
-    <string name="start_listener">开启服务</string>
-    <string name="stop_listener">停止服务</string>
-    <string name="title_activity_setting">SettingActivity</string>
+    <string name="btn_start_listener">开启服务</string>
+    <string name="btn_stop_listener">停止服务</string>
+    <string name="btn_setting">软件设置</string>
+
+
+    <string name="setting_title">设置</string>
+
+    <string name="about">关于</string>
+    <string name="about_desc">关于本APP</string>
+    <string name="about_version_number">版本号</string>
+    <string name="about_version_number_unknown">未知版本</string>
+    <string name="about_mianze">免责声明</string>
+    <string name="about_authors_url">http://www.definebytime.com/translator</string>
+    <string name="about_author_name">向晚</string>
+    <string name="about_author">作者</string>
+
+    <string name="setting_normal">偏好设置</string>
+    <string name="setting_normal_desc">通用的偏好设置</string>
 </resources>

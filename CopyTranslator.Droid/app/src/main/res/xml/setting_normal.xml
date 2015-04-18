@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:key="screen_list"
+  android:title="@string/setting_title">
+  <CheckBoxPreference
+    android:key="isAutoOpenBox"
+    android:summaryOff="复制文字后不要自动打开结果窗口"
+    android:summaryOn="复制文字后自动打开结果窗口"
+    android:title="是否自动打开打开结果窗口"
+    android:defaultValue="true">
+  </CheckBoxPreference> 
+</PreferenceScreen>

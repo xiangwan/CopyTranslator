@@ -3,6 +3,7 @@ package com.definebytime.copytranslator;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,6 +18,10 @@ private   String SERVICE_NAME="com.definebytime.copytranslator.ClipChangedListen
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
+        getSupportActionBar().setIcon(R.drawable.ic_home);
+
+
         btnStart =  this.findViewById(R.id.btnStartService);
         btnStop =  this.findViewById(R.id.btnStopService);
         if (Utils.isServiceRun(MainActivity.this,SERVICE_NAME)){
@@ -26,29 +31,6 @@ private   String SERVICE_NAME="com.definebytime.copytranslator.ClipChangedListen
         }
     }
 
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            startActivity(new Intent(MainActivity.this,SettingActivity.class));
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
 
     public void startClipService(View view) {
         if (Utils.isServiceRun(MainActivity.this,SERVICE_NAME)){
@@ -72,5 +54,9 @@ private   String SERVICE_NAME="com.definebytime.copytranslator.ClipChangedListen
         btnStop.setEnabled(false);
         btnStart.setEnabled(true);
         Toast.makeText(getApplicationContext(), "成功停止服务！", Toast.LENGTH_SHORT).show();
+    }
+
+    public void openSetting(View view) {
+        startActivity(new Intent(MainActivity.this,SettingsActivity.class));
     }
 }
