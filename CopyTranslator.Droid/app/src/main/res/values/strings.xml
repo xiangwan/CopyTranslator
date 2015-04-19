@@ -19,4 +19,6 @@
 
     <string name="setting_normal">偏好设置</string>
     <string name="setting_normal_desc">通用的偏好设置</string>
+    <string name="status_running">正在运行</string>
+    <string name="status_stopping">没有运行</string>
 </resources>
