@@ -1,14 +1,12 @@
 package com.definebytime.copytranslator;
 
 import android.content.Context;
-import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 
@@ -26,6 +24,7 @@ public class FloatWindowBoxView extends LinearLayout {
     public static int viewHeight;
 
     public final WebView wvResult;
+    public final LinearLayout boxContainer;
     private WebViewListener webViewListener;
 
     public void setWebViewListener(WebViewListener listener) {
@@ -35,7 +34,7 @@ public class FloatWindowBoxView extends LinearLayout {
     public FloatWindowBoxView(final Context context) {
         super(context);
         LayoutInflater.from(context).inflate(R.layout.float_box, this);
-        View view = findViewById(R.id.llBox);
+        View view = findViewById(R.id.boxContainer);
         viewWidth = view.getLayoutParams().width;
         viewHeight = view.getLayoutParams().height;
         ImageButton close = (ImageButton) findViewById(R.id.btnClose);
@@ -43,7 +42,7 @@ public class FloatWindowBoxView extends LinearLayout {
             @Override
             public void onClick(View v) {
                 MyWindowManager.hideBoxWindow(context);
-                //MyWindowManager.showBarWindow(context, false);
+                //MyWindowManager.showBarWindow(context, false);//TODO 提供首选项支持，可能会希望常驻桌面
             }
         });
       //  close.getBackground().setAlpha(100);
@@ -58,7 +57,7 @@ public class FloatWindowBoxView extends LinearLayout {
             }
         });
         wvResult.getSettings().setJavaScriptEnabled(true);
-
+        boxContainer=(LinearLayout)findViewById(R.id.boxContainer);
     }
 
     public interface WebViewListener {

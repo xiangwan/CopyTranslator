@@ -30,6 +30,7 @@ public class FloatWindowBarView extends LinearLayout {
     private static int statusBarHeight;
 
 
+
     /**
      * 用于更新小悬浮窗的位置
      */
@@ -73,8 +74,8 @@ public class FloatWindowBarView extends LinearLayout {
 
     public final ImageView ivOpen;
     public final NumberCircleProgressBar progressBar;
+    public final LinearLayout barContainer;
 
-    public LaunchTask  launchTask;
 
     public FloatWindowBarView(Context context) {
         super(context);
@@ -82,11 +83,13 @@ public class FloatWindowBarView extends LinearLayout {
         LayoutInflater.from(context).inflate(R.layout.float_bar, this);
         ivOpen = (ImageView) findViewById(R.id.ivOpen);
         ivOpen.setVisibility(GONE);
-        viewWidth = ivOpen.getLayoutParams().width;
-        viewHeight = ivOpen.getLayoutParams().height;
+
         progressBar = (NumberCircleProgressBar) findViewById(R.id.numberCircleProgressbar);
         progressBar.setVisibility(VISIBLE);
-        launchTask=new LaunchTask();
+
+        barContainer=(LinearLayout)findViewById(R.id.barContainer);
+        viewWidth = barContainer.getLayoutParams().width;
+        viewHeight = barContainer.getLayoutParams().height;
     }
 
     @Override
@@ -163,41 +166,5 @@ public class FloatWindowBarView extends LinearLayout {
             }
         }
         return statusBarHeight;
-    }
-
-   public class LaunchTask extends AsyncTask<Boolean, Void, Void> {
-
-        @Override
-        protected Void doInBackground(Boolean... params) {
-            int target = windowManager.getDefaultDisplay().getWidth();
-            if (params[0]) {//从屏幕左侧滑动到中央
-                mParams.x = 0;
-                target = target / 2;
-            }
-            while (mParams.x < target) {
-                mParams.x = mParams.x + 10;// 在这里对位置进行改变
-                publishProgress();
-                try {
-                    Thread.sleep(5);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-            return null;
-        }
-
-        @Override
-        protected void onProgressUpdate(Void... values) {
-            windowManager.updateViewLayout(FloatWindowBarView.this, mParams);
-        }
-
-        @Override
-        protected void onPostExecute(Void result) {
-          /*  if (xDownInScreen>0&&yDownInScreen>0) {
-                mParams.x = (int) (xDownInScreen - xInView);
-                mParams.y = (int) (yDownInScreen - yInView);
-            }
-            windowManager.updateViewLayout(FloatWindowBarView.this, mParams);*/
-        }
     }
 }

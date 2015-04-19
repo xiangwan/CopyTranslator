@@ -3,6 +3,8 @@
     xmlns:custom="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical" android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    android:id="@+id/barContainer"
+    android:layout_margin="0dp"
     >
 
     <ImageView
@@ -11,20 +13,21 @@
         android:src="@drawable/ic_open"
         android:background="@drawable/corner_border_show"
         android:id="@+id/ivOpen"
-        android:visibility="gone"/>
+        android:visibility="gone"
+        android:layout_margin="0dp"/>
     <com.definebytime.copytranslator.NumberCircleProgressBar
         android:id="@+id/numberCircleProgressbar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:padding="10dp"
+        android:layout_margin="0dp"
         custom:max="100"
         custom:progress="0"
-        custom:progress_circle_radius="50dp"
+        custom:progress_circle_radius="30dp"
         custom:progress_fill_mode="rotate"
         custom:progress_reached_color="#3498DB"
         custom:progress_text_color="@android:color/black"
-        custom:progress_text_size="15sp"
+        custom:progress_text_size="12sp"
         custom:progress_text_visibility="visible"
         custom:progress_unreached_color="#CCCCCC"
         />

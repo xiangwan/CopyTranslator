@@ -6,11 +6,18 @@ import java.io.IOException;
 
 import android.app.ActivityManager;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.PixelFormat;
+import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.TranslateAnimation;
 
 public class MyWindowManager {
 
@@ -43,17 +50,23 @@ public class MyWindowManager {
      * 用于获取手机可用内存
      */
     private static ActivityManager mActivityManager;
+    private static int screenWidth;
+    private static int screenHeight;
+    private static Animation animBoxOut;
+    private static Animation animBoxIn;
+    private static Animation animBarIn;
+    private static Animation animBarDock;
 
     /**
      * 创建一个小悬浮窗。初始位置为屏幕的右部中间位置。
      *
      * @param context 必须为应用程序的Context.
      */
-    private static void createBarWindow(Context context) {
+    private static void createBarWindow(final Context context) {
         if (barWindow == null) {
             WindowManager windowManager = getWindowManager(context);
-            int screenWidth = windowManager.getDefaultDisplay().getWidth();
-            int screenHeight = windowManager.getDefaultDisplay().getHeight();
+             screenWidth = windowManager.getDefaultDisplay().getWidth();
+              screenHeight = windowManager.getDefaultDisplay().getHeight();
             barWindow = new FloatWindowBarView(context);
             if (barWindowParams == null) {
                 barWindowParams = new LayoutParams();
@@ -64,34 +77,35 @@ public class MyWindowManager {
                 barWindowParams.gravity = Gravity.LEFT | Gravity.TOP;
                 barWindowParams.width = FloatWindowBarView.viewWidth;
                 barWindowParams.height = FloatWindowBarView.viewHeight;
-                barWindowParams.x = screenWidth;
-                barWindowParams.y = screenHeight / 2 - 50;
+                barWindowParams.x = screenWidth/2- FloatWindowBarView.viewWidth-100;;
+                barWindowParams.y = screenHeight / 2-FloatWindowBarView.viewHeight-100;;
             }
             barWindow.setParams(barWindowParams);
             windowManager.addView(barWindow, barWindowParams);
             if (boxWindow == null) createBoxWindow(context);
-            boxWindow.setWebViewListener(new FloatWindowBoxView.WebViewListener() {
+              boxWindow.setWebViewListener(new FloatWindowBoxView.WebViewListener() {
                 @Override
                 public void onPageFinished(String url) {
-                    barWindow.progressBar.setVisibility(View.GONE);
-                    barWindow.ivOpen.setVisibility(View.VISIBLE);
-                    barWindow.launchTask.execute(false);
+                    showBarWindow(context, false);
+                    if (isAutoOpenBox(context)){
+                        showBoxWindow(context);
+                    }
                 }
 
                 @Override
                 public void onReceivedError(String url, String desc) {
-                    barWindow.progressBar.setVisibility(View.GONE);
-                    barWindow.ivOpen.setVisibility(View.VISIBLE);
-                    barWindow.launchTask.execute(false);
+                    showBarWindow(context,false);
+                    if (isAutoOpenBox(context)){
+                        showBoxWindow(context);
+                    }
                 }
 
                 @Override
                 public void onProgressChanged(int progress) {
                    barWindow.progressBar.setProgress(progress);
-
                 }
             });
-            hideBoxWindow(context);
+
         }
     }
 
@@ -99,14 +113,24 @@ public class MyWindowManager {
      * 显示bar window 如果必要创建新实例
      */
     public static void showBarWindow(Context context, boolean isLoading) {
-
+        Log.d("XXX", "showBarWindow");
         if (barWindow == null || barWindowParams == null) createBarWindow(context);
-        if (isLoading){
-
-        }else{
-
-        }
+        WindowManager windowManager = getWindowManager(context);
         barWindow.setVisibility(View.VISIBLE);
+        if (isLoading) {
+            barWindowParams.x = screenWidth/2- FloatWindowBarView.viewWidth-100;
+            barWindowParams.y = screenHeight / 2-FloatWindowBarView.viewHeight-100;
+            windowManager.updateViewLayout(barWindow,barWindowParams);
+            barWindow.progressBar.setProgress(0);
+            barWindow.progressBar.setVisibility(View.VISIBLE);
+            barWindow.ivOpen.setVisibility(View.GONE);
+            return;
+        }
+        barWindowParams.x =screenWidth-FloatWindowBarView.viewWidth-100;
+        barWindowParams.y = screenHeight / 2-FloatWindowBarView.viewHeight-100;
+        windowManager.updateViewLayout(barWindow,barWindowParams);
+        barWindow.progressBar.setVisibility(View.GONE);
+        barWindow.ivOpen.setVisibility(View.VISIBLE);
     }
 
     /**
@@ -135,16 +159,16 @@ public class MyWindowManager {
      *
      * @param context 必须为应用程序的Context.
      */
-    private static void createBoxWindow(Context context) {
+    private static void createBoxWindow(final Context context) {
         if (boxWindow == null) {
             WindowManager windowManager = getWindowManager(context);
-            int screenWidth = windowManager.getDefaultDisplay().getWidth();
-            int screenHeight = windowManager.getDefaultDisplay().getHeight();
+              screenWidth = windowManager.getDefaultDisplay().getWidth();
+              screenHeight = windowManager.getDefaultDisplay().getHeight();
             boxWindow = new FloatWindowBoxView(context);
             if (boxWindowParams == null) {
                 boxWindowParams = new LayoutParams();
-                boxWindowParams.x = screenWidth / 2 - FloatWindowBoxView.viewWidth / 2;
-                boxWindowParams.y = screenHeight / 2 - FloatWindowBoxView.viewHeight / 2;
+             //   boxWindowParams.x = screenWidth / 2 - FloatWindowBoxView.viewWidth / 2;
+               // boxWindowParams.y = screenHeight / 2 - FloatWindowBoxView.viewHeight / 2;
                 boxWindowParams.type = LayoutParams.TYPE_SYSTEM_ALERT;
                 boxWindowParams.format = PixelFormat.RGBA_8888;
                 boxWindowParams.gravity = Gravity.LEFT | Gravity.CENTER_VERTICAL;
@@ -152,6 +176,13 @@ public class MyWindowManager {
                 boxWindowParams.height = FloatWindowBoxView.viewHeight;
             }
             windowManager.addView(boxWindow, boxWindowParams);
+            boxWindow.setVisibility(View.GONE);
+            boxWindow.boxContainer.setOnClickListener(new View.OnClickListener() {
+               @Override
+               public void onClick(View view) {
+                   hideBoxWindow(context);//点击空白处隐藏窗口
+               }
+           });
         }
     }
 
@@ -161,9 +192,12 @@ public class MyWindowManager {
      * @param context
      */
     public static void showBoxWindow(Context context) {
-        WindowManager windowManager = getWindowManager(context);
         if (boxWindow == null || boxWindowParams == null) createBoxWindow(context);
         boxWindow.setVisibility(View.VISIBLE);
+        if (animBoxIn==null){
+            animBoxIn=AnimationUtils.loadAnimation(context,R.anim.box_in);
+        }
+        boxWindow.boxContainer.startAnimation(animBoxIn);
     }
 
     /**
@@ -171,14 +205,32 @@ public class MyWindowManager {
      */
     public static void hideBoxWindow(Context context) {
         if (boxWindow != null) {
-            boxWindow.setVisibility(View.GONE);
+            if (boxWindow.getVisibility()!=View.VISIBLE)return;
+            if (animBoxOut==null){
+                animBoxOut=AnimationUtils.loadAnimation(context,R.anim.box_out);
+                animBoxOut.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation animation) {
+
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animation animation) {
+                        boxWindow.setVisibility(View.GONE);
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animation animation) {
+
+                    }
+                });
+            }
+            boxWindow.boxContainer.startAnimation(animBoxOut);
         }
     }
-    public static void loadNewPage(String word) {
-        barWindow.progressBar.setProgress(0);
-        barWindow.progressBar.setVisibility(View.VISIBLE);
-        barWindow.launchTask.execute(true);
-        barWindow.ivOpen.setVisibility(View.GONE);
+    public static void loadNewPage(Context context,String word) {
+        Log.d("XXX","loadNewPage");
+        showBarWindow(context, true);
         boxWindow.wvResult.loadUrl("http://newwap.iciba.com/cword/" + word);
     }
     /**
@@ -221,6 +273,11 @@ public class MyWindowManager {
             mActivityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
         }
         return mActivityManager;
+    }
+
+    private static  boolean isAutoOpenBox(Context context){
+        SharedPreferences pref=PreferenceManager.getDefaultSharedPreferences(context);
+       return pref.getBoolean("isAutoOpenBox",true);
     }
 
 }

@@ -85,6 +85,7 @@ public class ClipChangedListenerService extends Service {
     public class MyClipListener implements ClipboardManager.OnPrimaryClipChangedListener {
 
         private final Context mContext;
+        private String lastWord="";
 
         public MyClipListener(Context context) {
             mContext = context;
@@ -99,13 +100,14 @@ public class ClipChangedListenerService extends Service {
             if (text == null || text.isEmpty()) {
                 msg = "剪贴板中无内容";
             } else {
-                if (Utils.isNetAvailable(ClipChangedListenerService.this)) {
-                    MyWindowManager.showBarWindow(mContext, true);
-                    MyWindowManager.loadNewPage(text);
-                } else {
-                    msg += "网络不可用";
+                if (!lastWord.equals(text)) {
+                    lastWord=text;
+                    if (Utils.isNetAvailable(ClipChangedListenerService.this)) {
+                        MyWindowManager.loadNewPage(ClipChangedListenerService.this, text);
+                    } else {
+                        msg += "网络不可用";
+                    }
                 }
-
             }
             Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_LONG).show();
         }
