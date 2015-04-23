@@ -1,24 +1,23 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen
-  xmlns:android="http://schemas.android.com/apk/res/android"
-  android:key="screen_list"
-  android:title="@string/setting_title">
-  <PreferenceCategory android:title="@string/about"> 
-    <Preference
-      android:title="@string/about_author"
-      android:summary="@string/about_author_name"
-      android:key="author"> 
-      <intent
-        android:action="android.intent.action.VIEW"
-        android:data="@string/about_authors_url" />
-    </Preference> 
-    <Preference
-      android:title="@string/about_version_number"
-      android:key="version" />
-      <Preference
-          android:title="@string/about_mianze"
-          android:summary="请自行承担使用本软件的一切后果"
-          android:key="licences" />
-  </PreferenceCategory> 
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    android:key="screen_list"
+    android:title="@string/setting_title">
+    <PreferenceCategory android:title="@string/about">
+        <Preference
+            android:key="author"
+            android:summary="@string/about_author_name"
+            android:title="@string/about_author">
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:data="@string/about_authors_url" />
+        </Preference>
+        <Preference
+            android:key="version"
+            android:title="@string/about_version_number" />
+        <Preference
+            android:key="licences"
+            android:summary="请自行承担使用本软件的一切后果"
+            android:title="@string/about_mianze" />
+    </PreferenceCategory>
 
 </PreferenceScreen>

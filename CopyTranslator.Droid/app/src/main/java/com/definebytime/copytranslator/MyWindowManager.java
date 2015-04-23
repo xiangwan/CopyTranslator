@@ -86,17 +86,21 @@ public class MyWindowManager {
               boxWindow.setWebViewListener(new FloatWindowBoxView.WebViewListener() {
                 @Override
                 public void onPageFinished(String url) {
-                    showBarWindow(context, false);
                     if (isAutoOpenBox(context)){
+                        hideBarWindow(context);
                         showBoxWindow(context);
+                    }else{
+                        showBarWindow(context, false);
                     }
                 }
 
                 @Override
                 public void onReceivedError(String url, String desc) {
-                    showBarWindow(context,false);
                     if (isAutoOpenBox(context)){
+                        hideBarWindow(context);
                         showBoxWindow(context);
+                    }else{
+                        showBarWindow(context, false);
                     }
                 }
 

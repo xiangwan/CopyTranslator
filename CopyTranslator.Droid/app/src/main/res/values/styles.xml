@@ -9,11 +9,13 @@
         <item name="colorAccent">@color/banana</item>
         <item name="android:textColorPrimary">@android:color/white</item>
     </style>
-    <style name="AppTheme" parent="AppBaseTheme">
-    </style>
+
+    <style name="AppTheme" parent="AppBaseTheme"></style>
+
     <style name="AppThemeSetting" parent="AppBaseTheme">
         <item name="android:listViewStyle">@style/MyListView</item>
     </style>
+
     <style name="MyListView" parent="@android:style/Widget.ListView">
         <item name="android:background">@android:color/white</item>
         <item name="android:padding">0dip</item>

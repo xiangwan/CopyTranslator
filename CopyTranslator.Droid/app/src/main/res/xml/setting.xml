@@ -14,23 +14,27 @@
  android:defaultValue 当对应值不存在时的默认值
  android:dialogTitle 弹出的对话框中的标题信息
  更多的标签设置等你来发掘
- --> 
+ -->
 <preference-headers xmlns:android="http://schemas.android.com/apk/res/android">
- 
-    <header 
-       android:icon="@drawable/ic_about_grey"
+
+    <header
         android:fragment="com.definebytime.copytranslator.SettingFragment"
-        android:title="@string/about"
-        android:summary="@string/about_desc" >
-        <extra android:name="SettingKey" android:value="about" />
+        android:icon="@drawable/ic_about_grey"
+        android:summary="@string/about_desc"
+        android:title="@string/about">
+        <extra
+            android:name="SettingKey"
+            android:value="about" />
     </header>
- 
-    <header 
-       android:icon="@drawable/ic_sync_grey"
+
+    <header
         android:fragment="com.definebytime.copytranslator.SettingFragment"
-        android:title="@string/setting_normal"
-        android:summary="@string/setting_normal_desc" >
-        <extra android:name="SettingKey" android:value="normal" />
+        android:icon="@drawable/ic_sync_grey"
+        android:summary="@string/setting_normal_desc"
+        android:title="@string/setting_normal">
+        <extra
+            android:name="SettingKey"
+            android:value="normal" />
     </header>
 
 </preference-headers>

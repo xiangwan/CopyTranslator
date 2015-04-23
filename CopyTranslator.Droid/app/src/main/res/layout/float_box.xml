@@ -1,32 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+    android:id="@+id/boxContainer"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginTop="100dp"
     android:layout_marginBottom="20dp"
     android:layout_marginLeft="10dp"
     android:layout_marginRight="10dp"
-    android:id="@+id/boxContainer">
+    android:layout_marginTop="100dp"
+    android:orientation="vertical">
+
     <ImageButton
+        android:id="@+id/btnClose"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/btnClose"
-        android:src="@drawable/ic_hide"
         android:layout_gravity="center_horizontal"
         android:layout_marginBottom="0dp"
-        android:background="@drawable/corner_border_hide"/>
+        android:background="@drawable/corner_border_hide"
+        android:src="@drawable/ic_hide" />
+
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/corner_border_webview">
-    <WebView
-        android:layout_marginTop="0dp"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/wvResult"
-        android:layout_gravity="center_horizontal"
-       />
-</LinearLayout>
+        android:background="@drawable/corner_border_webview"
+        android:orientation="vertical">
+
+        <WebView
+            android:id="@+id/wvResult"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="0dp" />
+    </LinearLayout>
 </LinearLayout>

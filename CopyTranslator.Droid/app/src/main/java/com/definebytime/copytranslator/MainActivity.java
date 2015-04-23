@@ -22,7 +22,7 @@ public class MainActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
-        getSupportActionBar().setIcon(R.drawable.ic_home);
+        getSupportActionBar().setIcon(R.drawable.ic_action);
 
         tvStatus = (TextView) findViewById(R.id.tvStatus);
 
